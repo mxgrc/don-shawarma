@@ -89,21 +89,21 @@
     </header>
 
     <!-- Order Flow Modal -->
-    <div id="orderModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto fade-in">
+    <div id="orderModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] flex flex-col overflow-hidden fade-in">
             <!-- Modal Header -->
-            <div class="bg-gradient-to-r from-orange-600 to-red-600 text-white p-6 rounded-t-2xl sticky top-0 z-10">
-                <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-2xl font-bold">Armar Pedido</h2>
+            <div class="bg-gradient-to-r from-orange-600 to-red-600 text-white p-3 md:p-4 rounded-t-2xl sticky top-0 z-10">
+                <div class="flex items-center justify-between mb-2 md:mb-3">
+                    <h2 class="text-xl md:text-2xl font-bold">Armar Pedido</h2>
                     <button onclick="closeOrderFlow()" class="hover:bg-white hover:bg-opacity-20 p-2 rounded-full transition">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                         </svg>
                     </button>
                 </div>
                 
                 <!-- Progress Steps -->
-                <div class="flex items-center justify-center gap-2 flex-wrap" id="progressSteps">
+                <div class="flex items-center justify-center gap-0.5 flex-wrap" id="progressSteps">
                     <!-- Steps will be rendered by JS -->
                 </div>
             </div>
@@ -418,11 +418,11 @@
                 const isActive = currentStep >= i;
                 const isComplete = currentStep > i;
                 html += `
-                    <div class="flex items-center gap-1">
-                        <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm transition-all ${isActive ? 'bg-yellow-400 text-orange-900 scale-110' : 'bg-white bg-opacity-30 text-white'}">
+                    <div class="flex items-center gap-0.5">
+                        <div class="w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center font-bold text-xs md:text-sm transition-all ${isActive ? 'bg-yellow-400 text-orange-900 scale-105' : 'bg-white bg-opacity-30 text-white'}">
                             ${isComplete ? '✓' : i}
                         </div>
-                        ${i < 6 ? `<div class="w-6 h-1 mx-1 rounded transition-all ${currentStep > i ? 'bg-yellow-400' : 'bg-white bg-opacity-30'}"></div>` : ''}
+                        ${i < 6 ? `<div class="w-4 md:w-5 h-0.5 md:h-1 rounded transition-all ${currentStep > i ? 'bg-yellow-400' : 'bg-white bg-opacity-30'}"></div>` : ''}
                     </div>
                 `;
             }
