@@ -581,7 +581,7 @@
                     <p class="text-gray-600 mb-4">Selecciona los productos que deseas</p>
                     
                     <!-- Menu de productos (con scroll) -->
-                    <div class="flex-1 space-y-4 overflow-y-auto pr-2 mb-4" style="min-height: 300px;">
+                    <div class="space-y-4 mb-4">
                         ${renderMenuCategories()}
                     </div>
                     
@@ -641,24 +641,51 @@
             `;
         }
 
+        function scrollCategory(event, direction) {
+            const container = event.target.closest('.mb-6').querySelector('.overflow-x-auto');
+            const scrollAmount = 300;
+            container.scrollBy({
+                left: direction * scrollAmount,
+                behavior: 'smooth'
+            });
+        }
+
         function renderMenuCategories() {
             let html = '';
             
             // Shawarmas
             html += `
-                <div class="mb-6">
-                    <h4 class="font-bold text-lg mb-3 text-orange-600">🥙 Shawarmas</h4>
-                    <div class="overflow-x-auto pb-2 -mx-6 px-6" style="scroll-behavior: smooth;">
-                        <div class="flex gap-3 min-w-max">
-                            ${menuItems.shawarmas.map((item, idx) => `
-                                <button onclick='addItem(${JSON.stringify(item)})' class="flex-shrink-0 w-64 text-left p-4 bg-white rounded-lg border border-gray-200 hover:border-orange-600 hover:shadow transition">
-                                    <div class="flex justify-between items-start gap-2 mb-2">
-                                        <span class="font-bold text-sm flex-1">${item.name}</span>
-                                        <span class="font-bold text-orange-600 whitespace-nowrap">$${item.price.toLocaleString('es-CL')}</span>
+                <div class="mb-6 relative">
+                    <h4 class="font-bold text-lg text-orange-600 mb-3">🥙 Shawarmas</h4>
+                    <button onclick="scrollCategory(event, -1)" class="absolute left-0 top-8 p-2 hover:bg-orange-100 text-orange-600 rounded transition z-10">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                    </button>
+                    <button onclick="scrollCategory(event, 1)" class="absolute right-0 top-8 p-2 hover:bg-orange-100 text-orange-600 rounded transition z-10">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+                    <div class="overflow-x-auto pb-2 -mx-6 px-6">
+                        <div class="space-y-3">
+                            ${(() => {
+                                const mid = Math.ceil(menuItems.shawarmas.length / 2);
+                                const rows = [menuItems.shawarmas.slice(0, mid), menuItems.shawarmas.slice(mid)];
+                                return rows.map(row => `
+                                    <div class="flex gap-3 min-w-max">
+                                        ${row.map((item) => `
+                                            <button onclick='addItem(${JSON.stringify(item)})' class="flex-shrink-0 w-64 text-left p-4 bg-white rounded-lg border border-gray-200 hover:border-orange-600 hover:shadow transition">
+                                                    <div class="flex justify-between items-start gap-2 mb-2">
+                                                        <span class="font-bold text-sm flex-1">${item.name}</span>
+                                                        <span class="font-bold text-orange-600 whitespace-nowrap">$${item.price.toLocaleString('es-CL')}</span>
+                                                    </div>
+                                                    <p class="text-xs text-gray-600 line-clamp-3">${item.description}</p>
+                                                </button>
+                                            `).join('')}
                                     </div>
-                                    <p class="text-xs text-gray-600 line-clamp-3">${item.description}</p>
-                                </button>
-                            `).join('')}
+                                `).join('');
+                            })()}
                         </div>
                     </div>
                 </div>
@@ -666,19 +693,53 @@
             
             // Shawarmas Gigantes
             html += `
-                <div class="mb-6">
-                    <h4 class="font-bold text-lg mb-3 text-orange-600">🥙 Shawarmas Gigantes</h4>
-                    <div class="overflow-x-auto pb-2 -mx-6 px-6" style="scroll-behavior: smooth;">
-                        <div class="flex gap-3 min-w-max">
-                            ${menuItems.shawarmasGigantes.map((item, idx) => `
-                                <button onclick='addItem(${JSON.stringify(item)})' class="flex-shrink-0 w-64 text-left p-4 bg-white rounded-lg border border-gray-200 hover:border-orange-600 hover:shadow transition">
-                                    <div class="flex justify-between items-start gap-2 mb-2">
-                                        <span class="font-bold text-sm flex-1">${item.name}</span>
-                                        <span class="font-bold text-orange-600 whitespace-nowrap">$${item.price.toLocaleString('es-CL')}</span>
-                                    </div>
-                                    <p class="text-xs text-gray-600 line-clamp-3">${item.description}</p>
-                                </button>
-                            `).join('')}
+                <div class="mb-6 relative">
+                    <h4 class="font-bold text-lg text-orange-600 mb-3">🥙 Shawarmas Gigantes</h4>
+                    <button onclick="scrollCategory(event, -1)" class="absolute left-0 top-8 p-2 hover:bg-orange-100 text-orange-600 rounded transition z-10">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                    </button>
+                    <button onclick="scrollCategory(event, 1)" class="absolute right-0 top-8 p-2 hover:bg-orange-100 text-orange-600 rounded transition z-10">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+                    <div class="overflow-x-auto pb-2 -mx-6 px-6">
+                        <div class="space-y-3">
+                            ${(() => {
+                                if (menuItems.shawarmasGigantes.length <= 4) {
+                                    return `
+                                        <div class="flex gap-3 min-w-max">
+                                            ${menuItems.shawarmasGigantes.map((item) => `
+                                                <button onclick='addItem(${JSON.stringify(item)})' class="flex-shrink-0 w-64 text-left p-4 bg-white rounded-lg border border-gray-200 hover:border-orange-600 hover:shadow transition">
+                                                        <div class="flex justify-between items-start gap-2 mb-2">
+                                                            <span class="font-bold text-sm flex-1">${item.name}</span>
+                                                            <span class="font-bold text-orange-600 whitespace-nowrap">$${item.price.toLocaleString('es-CL')}</span>
+                                                        </div>
+                                                        <p class="text-xs text-gray-600 line-clamp-3">${item.description}</p>
+                                                    </button>
+                                                `).join('')}
+                                        </div>
+                                    `;
+                                } else {
+                                    const mid = Math.ceil(menuItems.shawarmasGigantes.length / 2);
+                                    const rows = [menuItems.shawarmasGigantes.slice(0, mid), menuItems.shawarmasGigantes.slice(mid)];
+                                    return rows.map(row => `
+                                        <div class="flex gap-3 min-w-max">
+                                            ${row.map((item) => `
+                                                <button onclick='addItem(${JSON.stringify(item)})' class="flex-shrink-0 w-64 text-left p-4 bg-white rounded-lg border border-gray-200 hover:border-orange-600 hover:shadow transition">
+                                                        <div class="flex justify-between items-start gap-2 mb-2">
+                                                            <span class="font-bold text-sm flex-1">${item.name}</span>
+                                                            <span class="font-bold text-orange-600 whitespace-nowrap">$${item.price.toLocaleString('es-CL')}</span>
+                                                        </div>
+                                                        <p class="text-xs text-gray-600 line-clamp-3">${item.description}</p>
+                                                    </button>
+                                                `).join('')}
+                                        </div>
+                                    `).join('');
+                                }
+                            })()}
                         </div>
                     </div>
                 </div>
@@ -686,19 +747,37 @@
             
             // Hamburguesas
             html += `
-                <div class="mb-6">
-                    <h4 class="font-bold text-lg mb-3 text-orange-600">🍔 Hamburguesas</h4>
-                    <div class="overflow-x-auto pb-2 -mx-6 px-6" style="scroll-behavior: smooth;">
-                        <div class="flex gap-3 min-w-max">
-                            ${menuItems.hamburguesas.map((item, idx) => `
-                                <button onclick='addItem(${JSON.stringify(item)})' class="flex-shrink-0 w-64 text-left p-4 bg-white rounded-lg border border-gray-200 hover:border-orange-600 hover:shadow transition">
-                                    <div class="flex justify-between items-start gap-2 mb-2">
-                                        <span class="font-bold text-sm flex-1">${item.name}</span>
-                                        <span class="font-bold text-orange-600 whitespace-nowrap">$${item.price.toLocaleString('es-CL')}</span>
+                <div class="mb-6 relative">
+                    <h4 class="font-bold text-lg text-orange-600 mb-3">🍔 Hamburguesas</h4>
+                    <button onclick="scrollCategory(event, -1)" class="absolute left-0 top-8 p-2 hover:bg-orange-100 text-orange-600 rounded transition z-10">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                    </button>
+                    <button onclick="scrollCategory(event, 1)" class="absolute right-0 top-8 p-2 hover:bg-orange-100 text-orange-600 rounded transition z-10">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+                    <div class="overflow-x-auto pb-2 -mx-6 px-6">
+                        <div class="space-y-3">
+                            ${(() => {
+                                const mid = Math.ceil(menuItems.hamburguesas.length / 2);
+                                const rows = [menuItems.hamburguesas.slice(0, mid), menuItems.hamburguesas.slice(mid)];
+                                return rows.map(row => `
+                                    <div class="flex gap-3 min-w-max">
+                                        ${row.map((item) => `
+                                            <button onclick='addItem(${JSON.stringify(item)})' class="flex-shrink-0 w-64 text-left p-4 bg-white rounded-lg border border-gray-200 hover:border-orange-600 hover:shadow transition">
+                                                    <div class="flex justify-between items-start gap-2 mb-2">
+                                                        <span class="font-bold text-sm flex-1">${item.name}</span>
+                                                        <span class="font-bold text-orange-600 whitespace-nowrap">$${item.price.toLocaleString('es-CL')}</span>
+                                                    </div>
+                                                    <p class="text-xs text-gray-600 line-clamp-3">${item.description}</p>
+                                                </button>
+                                            `).join('')}
                                     </div>
-                                    <p class="text-xs text-gray-600 line-clamp-3">${item.description}</p>
-                                </button>
-                            `).join('')}
+                                `).join('');
+                            })()}
                         </div>
                     </div>
                 </div>
@@ -706,19 +785,53 @@
             
             // Mechadas
             html += `
-                <div class="mb-6">
-                    <h4 class="font-bold text-lg mb-3 text-orange-600">🥪 Mechadas</h4>
-                    <div class="overflow-x-auto pb-2 -mx-6 px-6" style="scroll-behavior: smooth;">
-                        <div class="flex gap-3 min-w-max">
-                            ${menuItems.mechadas.map((item, idx) => `
-                                <button onclick='addItem(${JSON.stringify(item)})' class="flex-shrink-0 w-64 text-left p-4 bg-white rounded-lg border border-gray-200 hover:border-orange-600 hover:shadow transition">
-                                    <div class="flex justify-between items-start gap-2 mb-2">
-                                        <span class="font-bold text-sm flex-1">${item.name}</span>
-                                        <span class="font-bold text-orange-600 whitespace-nowrap">$${item.price.toLocaleString('es-CL')}</span>
-                                    </div>
-                                    <p class="text-xs text-gray-600 line-clamp-3">${item.description}</p>
-                                </button>
-                            `).join('')}
+                <div class="mb-6 relative">
+                    <h4 class="font-bold text-lg text-orange-600 mb-3">🥪 Mechadas</h4>
+                    <button onclick="scrollCategory(event, -1)" class="absolute left-0 top-1/2 -translate-y-1/2 p-2 hover:bg-orange-100 text-orange-600 rounded transition z-10">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                    </button>
+                    <button onclick="scrollCategory(event, 1)" class="absolute right-0 top-1/2 -translate-y-1/2 p-2 hover:bg-orange-100 text-orange-600 rounded transition z-10">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+                    <div class="overflow-x-auto pb-2 -mx-6 px-6">
+                        <div class="space-y-3">
+                            ${(() => {
+                                if (menuItems.mechadas.length <= 4) {
+                                    return `
+                                        <div class="flex gap-3 min-w-max">
+                                            ${menuItems.mechadas.map((item) => `
+                                                <button onclick='addItem(${JSON.stringify(item)})' class="flex-shrink-0 w-64 text-left p-4 bg-white rounded-lg border border-gray-200 hover:border-orange-600 hover:shadow transition">
+                                                        <div class="flex justify-between items-start gap-2 mb-2">
+                                                            <span class="font-bold text-sm flex-1">${item.name}</span>
+                                                            <span class="font-bold text-orange-600 whitespace-nowrap">$${item.price.toLocaleString('es-CL')}</span>
+                                                        </div>
+                                                        <p class="text-xs text-gray-600 line-clamp-3">${item.description}</p>
+                                                    </button>
+                                                `).join('')}
+                                        </div>
+                                    `;
+                                } else {
+                                    const mid = Math.ceil(menuItems.mechadas.length / 2);
+                                    const rows = [menuItems.mechadas.slice(0, mid), menuItems.mechadas.slice(mid)];
+                                    return rows.map(row => `
+                                        <div class="flex gap-3 min-w-max">
+                                            ${row.map((item) => `
+                                                <button onclick='addItem(${JSON.stringify(item)})' class="flex-shrink-0 w-64 text-left p-4 bg-white rounded-lg border border-gray-200 hover:border-orange-600 hover:shadow transition">
+                                                        <div class="flex justify-between items-start gap-2 mb-2">
+                                                            <span class="font-bold text-sm flex-1">${item.name}</span>
+                                                            <span class="font-bold text-orange-600 whitespace-nowrap">$${item.price.toLocaleString('es-CL')}</span>
+                                                        </div>
+                                                        <p class="text-xs text-gray-600 line-clamp-3">${item.description}</p>
+                                                    </button>
+                                                `).join('')}
+                                        </div>
+                                    `).join('');
+                                }
+                            })()}
                         </div>
                     </div>
                 </div>
@@ -726,19 +839,53 @@
             
             // Colaciones
             html += `
-                <div class="mb-6">
-                    <h4 class="font-bold text-lg mb-3 text-orange-600">🍽️ Colaciones</h4>
-                    <div class="overflow-x-auto pb-2 -mx-6 px-6" style="scroll-behavior: smooth;">
-                        <div class="flex gap-3 min-w-max">
-                            ${menuItems.colaciones.map((item, idx) => `
-                                <button onclick='addItem(${JSON.stringify(item)})' class="flex-shrink-0 w-64 text-left p-4 bg-white rounded-lg border border-gray-200 hover:border-orange-600 hover:shadow transition">
-                                    <div class="flex justify-between items-start gap-2 mb-2">
-                                        <span class="font-bold text-sm flex-1">${item.name}</span>
-                                        <span class="font-bold text-orange-600 whitespace-nowrap">$${item.price.toLocaleString('es-CL')}</span>
-                                    </div>
-                                    <p class="text-xs text-gray-600 line-clamp-3">${item.description}</p>
-                                </button>
-                            `).join('')}
+                <div class="mb-6 relative">
+                    <h4 class="font-bold text-lg text-orange-600 mb-3">🍽️ Colaciones</h4>
+                    <button onclick="scrollCategory(event, -1)" class="absolute left-0 top-1/2 -translate-y-1/2 p-2 hover:bg-orange-100 text-orange-600 rounded transition z-10">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                    </button>
+                    <button onclick="scrollCategory(event, 1)" class="absolute right-0 top-1/2 -translate-y-1/2 p-2 hover:bg-orange-100 text-orange-600 rounded transition z-10">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+                    <div class="overflow-x-auto pb-2 -mx-6 px-6">
+                        <div class="space-y-3">
+                            ${(() => {
+                                if (menuItems.colaciones.length <= 4) {
+                                    return `
+                                        <div class="flex gap-3 min-w-max">
+                                            ${menuItems.colaciones.map((item) => `
+                                                <button onclick='addItem(${JSON.stringify(item)})' class="flex-shrink-0 w-64 text-left p-4 bg-white rounded-lg border border-gray-200 hover:border-orange-600 hover:shadow transition">
+                                                        <div class="flex justify-between items-start gap-2 mb-2">
+                                                            <span class="font-bold text-sm flex-1">${item.name}</span>
+                                                            <span class="font-bold text-orange-600 whitespace-nowrap">$${item.price.toLocaleString('es-CL')}</span>
+                                                        </div>
+                                                        <p class="text-xs text-gray-600 line-clamp-3">${item.description}</p>
+                                                    </button>
+                                                `).join('')}
+                                        </div>
+                                    `;
+                                } else {
+                                    const mid = Math.ceil(menuItems.colaciones.length / 2);
+                                    const rows = [menuItems.colaciones.slice(0, mid), menuItems.colaciones.slice(mid)];
+                                    return rows.map(row => `
+                                        <div class="flex gap-3 min-w-max">
+                                            ${row.map((item) => `
+                                                <button onclick='addItem(${JSON.stringify(item)})' class="flex-shrink-0 w-64 text-left p-4 bg-white rounded-lg border border-gray-200 hover:border-orange-600 hover:shadow transition">
+                                                        <div class="flex justify-between items-start gap-2 mb-2">
+                                                            <span class="font-bold text-sm flex-1">${item.name}</span>
+                                                            <span class="font-bold text-orange-600 whitespace-nowrap">$${item.price.toLocaleString('es-CL')}</span>
+                                                        </div>
+                                                        <p class="text-xs text-gray-600 line-clamp-3">${item.description}</p>
+                                                    </button>
+                                                `).join('')}
+                                        </div>
+                                    `).join('');
+                                }
+                            })()}
                         </div>
                     </div>
                 </div>
@@ -746,19 +893,53 @@
             
             // Chorriwarmas
             html += `
-                <div class="mb-6">
-                    <h4 class="font-bold text-lg mb-3 text-orange-600">🌭 Chorriwarmas</h4>
-                    <div class="overflow-x-auto pb-2 -mx-6 px-6" style="scroll-behavior: smooth;">
-                        <div class="flex gap-3 min-w-max">
-                            ${menuItems.chorriwarmas.map((item, idx) => `
-                                <button onclick='addItem(${JSON.stringify(item)})' class="flex-shrink-0 w-64 text-left p-4 bg-white rounded-lg border border-gray-200 hover:border-orange-600 hover:shadow transition">
-                                    <div class="flex justify-between items-start gap-2 mb-2">
-                                        <span class="font-bold text-sm flex-1">${item.name}</span>
-                                        <span class="font-bold text-orange-600 whitespace-nowrap">$${item.price.toLocaleString('es-CL')}</span>
-                                    </div>
-                                    <p class="text-xs text-gray-600 line-clamp-3">${item.description}</p>
-                                </button>
-                            `).join('')}
+                <div class="mb-6 relative">
+                    <h4 class="font-bold text-lg text-orange-600 mb-3">🌭 Chorriwarmas</h4>
+                    <button onclick="scrollCategory(event, -1)" class="absolute left-0 top-1/2 -translate-y-1/2 p-2 hover:bg-orange-100 text-orange-600 rounded transition z-10">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                    </button>
+                    <button onclick="scrollCategory(event, 1)" class="absolute right-0 top-1/2 -translate-y-1/2 p-2 hover:bg-orange-100 text-orange-600 rounded transition z-10">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+                    <div class="overflow-x-auto pb-2 -mx-6 px-6">
+                        <div class="space-y-3">
+                            ${(() => {
+                                if (menuItems.chorriwarmas.length <= 4) {
+                                    return `
+                                        <div class="flex gap-3 min-w-max">
+                                            ${menuItems.chorriwarmas.map((item) => `
+                                                <button onclick='addItem(${JSON.stringify(item)})' class="flex-shrink-0 w-64 text-left p-4 bg-white rounded-lg border border-gray-200 hover:border-orange-600 hover:shadow transition">
+                                                        <div class="flex justify-between items-start gap-2 mb-2">
+                                                            <span class="font-bold text-sm flex-1">${item.name}</span>
+                                                            <span class="font-bold text-orange-600 whitespace-nowrap">$${item.price.toLocaleString('es-CL')}</span>
+                                                        </div>
+                                                        <p class="text-xs text-gray-600 line-clamp-3">${item.description}</p>
+                                                    </button>
+                                                `).join('')}
+                                        </div>
+                                    `;
+                                } else {
+                                    const mid = Math.ceil(menuItems.chorriwarmas.length / 2);
+                                    const rows = [menuItems.chorriwarmas.slice(0, mid), menuItems.chorriwarmas.slice(mid)];
+                                    return rows.map(row => `
+                                        <div class="flex gap-3 min-w-max">
+                                            ${row.map((item) => `
+                                                <button onclick='addItem(${JSON.stringify(item)})' class="flex-shrink-0 w-64 text-left p-4 bg-white rounded-lg border border-gray-200 hover:border-orange-600 hover:shadow transition">
+                                                        <div class="flex justify-between items-start gap-2 mb-2">
+                                                            <span class="font-bold text-sm flex-1">${item.name}</span>
+                                                            <span class="font-bold text-orange-600 whitespace-nowrap">$${item.price.toLocaleString('es-CL')}</span>
+                                                        </div>
+                                                        <p class="text-xs text-gray-600 line-clamp-3">${item.description}</p>
+                                                    </button>
+                                                `).join('')}
+                                        </div>
+                                    `).join('');
+                                }
+                            })()}
                         </div>
                     </div>
                 </div>
@@ -766,19 +947,53 @@
             
             // Ensaladas
             html += `
-                <div class="mb-6">
-                    <h4 class="font-bold text-lg mb-3 text-orange-600">🥗 Ensaladas</h4>
-                    <div class="overflow-x-auto pb-2 -mx-6 px-6" style="scroll-behavior: smooth;">
-                        <div class="flex gap-3 min-w-max">
-                            ${menuItems.ensaladas.map((item, idx) => `
-                                <button onclick='addItem(${JSON.stringify(item)})' class="flex-shrink-0 w-64 text-left p-4 bg-white rounded-lg border border-gray-200 hover:border-orange-600 hover:shadow transition">
-                                    <div class="flex justify-between items-start gap-2 mb-2">
-                                        <span class="font-bold text-sm flex-1">${item.name}</span>
-                                        <span class="font-bold text-orange-600 whitespace-nowrap">$${item.price.toLocaleString('es-CL')}</span>
-                                    </div>
-                                    <p class="text-xs text-gray-600 line-clamp-3">${item.description}</p>
-                                </button>
-                            `).join('')}
+                <div class="mb-6 relative">
+                    <h4 class="font-bold text-lg text-orange-600 mb-3">🥗 Ensaladas</h4>
+                    <button onclick="scrollCategory(event, -1)" class="absolute left-0 top-1/2 -translate-y-1/2 p-2 hover:bg-orange-100 text-orange-600 rounded transition z-10">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                    </button>
+                    <button onclick="scrollCategory(event, 1)" class="absolute right-0 top-1/2 -translate-y-1/2 p-2 hover:bg-orange-100 text-orange-600 rounded transition z-10">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+                    <div class="overflow-x-auto pb-2 -mx-6 px-6">
+                        <div class="space-y-3">
+                            ${(() => {
+                                if (menuItems.ensaladas.length <= 4) {
+                                    return `
+                                        <div class="flex gap-3 min-w-max">
+                                            ${menuItems.ensaladas.map((item) => `
+                                                <button onclick='addItem(${JSON.stringify(item)})' class="flex-shrink-0 w-64 text-left p-4 bg-white rounded-lg border border-gray-200 hover:border-orange-600 hover:shadow transition">
+                                                        <div class="flex justify-between items-start gap-2 mb-2">
+                                                            <span class="font-bold text-sm flex-1">${item.name}</span>
+                                                            <span class="font-bold text-orange-600 whitespace-nowrap">$${item.price.toLocaleString('es-CL')}</span>
+                                                        </div>
+                                                        <p class="text-xs text-gray-600 line-clamp-3">${item.description}</p>
+                                                    </button>
+                                                `).join('')}
+                                        </div>
+                                    `;
+                                } else {
+                                    const mid = Math.ceil(menuItems.ensaladas.length / 2);
+                                    const rows = [menuItems.ensaladas.slice(0, mid), menuItems.ensaladas.slice(mid)];
+                                    return rows.map(row => `
+                                        <div class="flex gap-3 min-w-max">
+                                            ${row.map((item) => `
+                                                <button onclick='addItem(${JSON.stringify(item)})' class="flex-shrink-0 w-64 text-left p-4 bg-white rounded-lg border border-gray-200 hover:border-orange-600 hover:shadow transition">
+                                                        <div class="flex justify-between items-start gap-2 mb-2">
+                                                            <span class="font-bold text-sm flex-1">${item.name}</span>
+                                                            <span class="font-bold text-orange-600 whitespace-nowrap">$${item.price.toLocaleString('es-CL')}</span>
+                                                        </div>
+                                                        <p class="text-xs text-gray-600 line-clamp-3">${item.description}</p>
+                                                    </button>
+                                                `).join('')}
+                                        </div>
+                                    `).join('');
+                                }
+                            })()}
                         </div>
                     </div>
                 </div>
@@ -786,19 +1001,37 @@
             
             // Promociones
             html += `
-                <div class="mb-6">
-                    <h4 class="font-bold text-lg mb-3 text-green-600">🎉 Promociones</h4>
-                    <div class="overflow-x-auto pb-2 -mx-6 px-6" style="scroll-behavior: smooth;">
-                        <div class="flex gap-3 min-w-max">
-                            ${menuItems.promociones.map((item, idx) => `
-                                <button onclick='addItem(${JSON.stringify(item)})' class="flex-shrink-0 w-64 text-left p-4 bg-green-50 rounded-lg border border-green-200 hover:border-green-600 hover:shadow transition">
-                                    <div class="flex justify-between items-start gap-2 mb-2">
-                                        <span class="font-bold text-sm flex-1">${item.name}</span>
-                                        <span class="font-bold text-green-600 whitespace-nowrap">$${item.price.toLocaleString('es-CL')}</span>
+                <div class="mb-6 relative">
+                    <h4 class="font-bold text-lg text-green-600 mb-3">🎉 Promociones</h4>
+                    <button onclick="scrollCategory(event, -1)" class="absolute left-0 top-1/2 -translate-y-1/2 p-2 hover:bg-green-100 text-green-600 rounded transition z-10">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                    </button>
+                    <button onclick="scrollCategory(event, 1)" class="absolute right-0 top-1/2 -translate-y-1/2 p-2 hover:bg-green-100 text-green-600 rounded transition z-10">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+                    <div class="overflow-x-auto pb-2 -mx-6 px-6">
+                        <div class="space-y-3">
+                            ${(() => {
+                                const mid = Math.ceil(menuItems.promociones.length / 2);
+                                const rows = [menuItems.promociones.slice(0, mid), menuItems.promociones.slice(mid)];
+                                return rows.map(row => `
+                                    <div class="flex gap-3 min-w-max">
+                                        ${row.map((item) => `
+                                            <button onclick='addItem(${JSON.stringify(item)})' class="flex-shrink-0 w-64 text-left p-4 bg-green-50 rounded-lg border border-green-200 hover:border-green-600 hover:shadow transition">
+                                                    <div class="flex justify-between items-start gap-2 mb-2">
+                                                        <span class="font-bold text-sm flex-1">${item.name}</span>
+                                                        <span class="font-bold text-green-600 whitespace-nowrap">$${item.price.toLocaleString('es-CL')}</span>
+                                                    </div>
+                                                    <p class="text-xs text-gray-600 line-clamp-3">${item.description}</p>
+                                                </button>
+                                            `).join('')}
                                     </div>
-                                    <p class="text-xs text-gray-600 line-clamp-3">${item.description}</p>
-                                </button>
-                            `).join('')}
+                                `).join('');
+                            })()}
                         </div>
                     </div>
                 </div>
@@ -806,19 +1039,53 @@
             
             // Promociones para Compartir
             html += `
-                <div class="mb-6">
-                    <h4 class="font-bold text-lg mb-3 text-purple-600">👥 Promociones para Compartir</h4>
-                    <div class="overflow-x-auto pb-2 -mx-6 px-6" style="scroll-behavior: smooth;">
-                        <div class="flex gap-3 min-w-max">
-                            ${menuItems.promocionesCompartir.map((item, idx) => `
-                                <button onclick='addItem(${JSON.stringify(item)})' class="flex-shrink-0 w-64 text-left p-4 bg-purple-50 rounded-lg border border-purple-200 hover:border-purple-600 hover:shadow transition">
-                                    <div class="flex justify-between items-start gap-2 mb-2">
-                                        <span class="font-bold text-sm flex-1">${item.name}</span>
-                                        <span class="font-bold text-purple-600 whitespace-nowrap">$${item.price.toLocaleString('es-CL')}</span>
-                                    </div>
-                                    <p class="text-xs text-gray-600 line-clamp-3">${item.description}</p>
-                                </button>
-                            `).join('')}
+                <div class="mb-6 relative">
+                    <h4 class="font-bold text-lg text-purple-600 mb-3">👥 Promociones para Compartir</h4>
+                    <button onclick="scrollCategory(event, -1)" class="absolute left-0 top-1/2 -translate-y-1/2 p-2 hover:bg-purple-100 text-purple-600 rounded transition z-10">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                    </button>
+                    <button onclick="scrollCategory(event, 1)" class="absolute right-0 top-1/2 -translate-y-1/2 p-2 hover:bg-purple-100 text-purple-600 rounded transition z-10">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+                    <div class="overflow-x-auto pb-2 -mx-6 px-6">
+                        <div class="space-y-3">
+                            ${(() => {
+                                if (menuItems.promocionesCompartir.length <= 4) {
+                                    return `
+                                        <div class="flex gap-3 min-w-max">
+                                            ${menuItems.promocionesCompartir.map((item) => `
+                                                <button onclick='addItem(${JSON.stringify(item)})' class="flex-shrink-0 w-64 text-left p-4 bg-purple-50 rounded-lg border border-purple-200 hover:border-purple-600 hover:shadow transition">
+                                                        <div class="flex justify-between items-start gap-2 mb-2">
+                                                            <span class="font-bold text-sm flex-1">${item.name}</span>
+                                                            <span class="font-bold text-purple-600 whitespace-nowrap">$${item.price.toLocaleString('es-CL')}</span>
+                                                        </div>
+                                                        <p class="text-xs text-gray-600 line-clamp-3">${item.description}</p>
+                                                    </button>
+                                                `).join('')}
+                                        </div>
+                                    `;
+                                } else {
+                                    const mid = Math.ceil(menuItems.promocionesCompartir.length / 2);
+                                    const rows = [menuItems.promocionesCompartir.slice(0, mid), menuItems.promocionesCompartir.slice(mid)];
+                                    return rows.map(row => `
+                                        <div class="flex gap-3 min-w-max">
+                                            ${row.map((item) => `
+                                                <button onclick='addItem(${JSON.stringify(item)})' class="flex-shrink-0 w-64 text-left p-4 bg-purple-50 rounded-lg border border-purple-200 hover:border-purple-600 hover:shadow transition">
+                                                        <div class="flex justify-between items-start gap-2 mb-2">
+                                                            <span class="font-bold text-sm flex-1">${item.name}</span>
+                                                            <span class="font-bold text-purple-600 whitespace-nowrap">$${item.price.toLocaleString('es-CL')}</span>
+                                                        </div>
+                                                        <p class="text-xs text-gray-600 line-clamp-3">${item.description}</p>
+                                                    </button>
+                                                `).join('')}
+                                        </div>
+                                    `).join('');
+                                }
+                            })()}
                         </div>
                     </div>
                 </div>
@@ -834,7 +1101,7 @@
                     <p class="text-gray-600 mb-6">¿Cómo vas a pagar?</p>
                     
                     <div class="grid grid-cols-1 gap-4">
-                        ${['Efectivo', 'Débito', 'Transferencia'].map(metodo => `
+                        ${['Efectivo', 'Débito', 'Crédito', 'Transferencia'].map(metodo => `
                             <button onclick="selectMetodoPago('${metodo}')" class="p-4 rounded-xl border-2 transition-all text-left ${orderData.metodoPago === metodo ? 'border-orange-600 bg-orange-50 shadow-lg' : 'border-gray-200 hover:border-orange-300 hover:shadow'}">
                                 <h4 class="font-bold text-lg">${metodo}</h4>
                             </button>
@@ -854,6 +1121,8 @@
         }
 
         function renderStep6() {
+            const subtotal = calculateSubtotal();
+            const delivery = orderData.tipoEntrega === 'Delivery' ? 2000 : 0;
             const total = calculateTotal();
             return `
                 <div>
@@ -900,6 +1169,16 @@
                         </div>
                         
                         <div class="pt-4 border-t border-gray-300">
+                            ${delivery > 0 ? `
+                                <div class="flex justify-between text-sm mb-2">
+                                    <span>Subtotal:</span>
+                                    <span class="font-bold">$${subtotal.toLocaleString('es-CL')}</span>
+                                </div>
+                                <div class="flex justify-between text-sm mb-2 text-red-600">
+                                    <span>Costo Delivery:</span>
+                                    <span class="font-bold">$${delivery.toLocaleString('es-CL')}</span>
+                                </div>
+                            ` : ''}
                             <div class="flex justify-between items-center text-xl font-bold">
                                 <span>Total:</span>
                                 <span class="text-orange-600">$${total.toLocaleString('es-CL')}</span>
@@ -1103,6 +1382,12 @@
         }
 
         function calculateTotal() {
+            const subtotal = orderData.items.reduce((sum, item) => sum + item.price, 0);
+            const delivery = orderData.tipoEntrega === 'Delivery' ? 2000 : 0;
+            return subtotal + delivery;
+        }
+        
+        function calculateSubtotal() {
             return orderData.items.reduce((sum, item) => sum + item.price, 0);
         }
 
@@ -1131,14 +1416,22 @@
             }
             
             message += `\n🛒 *PEDIDO:*\n`;
-            let total = 0;
+            let subtotal = 0;
             orderData.items.forEach((item, index) => {
                 message += `\n${index + 1}. ${item.name}\n`;
                 if (item.protein) message += `   Proteína: ${item.protein}\n`;
                 if (item.notes) message += `   Obs: ${item.notes}\n`;
                 message += `   Precio: $${item.price.toLocaleString('es-CL')}\n`;
-                total += item.price;
+                subtotal += item.price;
             });
+            
+            const delivery = orderData.tipoEntrega === 'Delivery' ? 2000 : 0;
+            const total = subtotal + delivery;
+            
+            if (delivery > 0) {
+                message += `\n📦 *Subtotal:* $${subtotal.toLocaleString('es-CL')}\n`;
+                message += `🚗 *Costo Delivery:* $${delivery.toLocaleString('es-CL')}\n`;
+            }
             
             message += `\n💰 *TOTAL: $${total.toLocaleString('es-CL')}*\n`;
             message += `💳 *Método de pago:* ${orderData.metodoPago}\n`;
