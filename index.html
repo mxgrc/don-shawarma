@@ -103,13 +103,13 @@
                 </div>
                 
                 <!-- Progress Steps -->
-                <div class="flex items-center justify-between text-sm" id="progressSteps">
+                <div class="flex items-center justify-center gap-2 flex-wrap" id="progressSteps">
                     <!-- Steps will be rendered by JS -->
                 </div>
             </div>
 
             <!-- Step Content -->
-            <div class="p-6" id="stepContent">
+            <div class="p-6 flex flex-col flex-1 overflow-hidden" id="stepContent">
                 <!-- Content will be rendered by JS -->
             </div>
         </div>
@@ -418,11 +418,11 @@
                 const isActive = currentStep >= i;
                 const isComplete = currentStep > i;
                 html += `
-                    <div class="flex items-center">
-                        <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold ${isActive ? 'bg-yellow-400 text-orange-900' : 'bg-white bg-opacity-30'}">
+                    <div class="flex items-center gap-1">
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm transition-all ${isActive ? 'bg-yellow-400 text-orange-900 scale-110' : 'bg-white bg-opacity-30 text-white'}">
                             ${isComplete ? '✓' : i}
                         </div>
-                        ${i < 6 ? `<div class="w-8 h-1 ${currentStep > i ? 'bg-yellow-400' : 'bg-white bg-opacity-30'}"></div>` : ''}
+                        ${i < 6 ? `<div class="w-6 h-1 mx-1 rounded transition-all ${currentStep > i ? 'bg-yellow-400' : 'bg-white bg-opacity-30'}"></div>` : ''}
                     </div>
                 `;
             }
@@ -431,24 +431,26 @@
 
         function renderStep1() {
             return `
-                <div>
-                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Selecciona tu Sede</h3>
-                    <p class="text-gray-600 mb-6">¿En qué local quieres hacer tu pedido?</p>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        ${locations.map(loc => `
-                            <button onclick="selectSede('${loc.name}', '${loc.phone}')" class="p-6 rounded-xl border-2 transition-all ${orderData.sede === loc.name ? 'border-orange-600 bg-orange-50 shadow-lg' : 'border-gray-200 hover:border-orange-300 hover:shadow'}">
-                                <svg class="mb-2 ${orderData.sede === loc.name ? 'text-orange-600' : 'text-gray-400'} w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                </svg>
-                                <h4 class="font-bold text-lg mb-1">${loc.name}</h4>
-                                <p class="text-sm text-gray-600">${loc.address}</p>
-                            </button>
-                        `).join('')}
+                <div class="flex flex-col h-full">
+                    <div class="flex-1 overflow-y-auto pr-4">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Selecciona tu Sede</h3>
+                        <p class="text-gray-600 mb-6">¿En qué local quieres hacer tu pedido?</p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            ${locations.map(loc => `
+                                <button onclick="selectSede('${loc.name}', '${loc.phone}')" class="p-6 rounded-xl border-2 transition-all ${orderData.sede === loc.name ? 'border-orange-600 bg-orange-50 shadow-lg' : 'border-gray-200 hover:border-orange-300 hover:shadow'}">
+                                    <svg class="mb-2 ${orderData.sede === loc.name ? 'text-orange-600' : 'text-gray-400'} w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    </svg>
+                                    <h4 class="font-bold text-lg mb-1">${loc.name}</h4>
+                                    <p class="text-sm text-gray-600">${loc.address}</p>
+                                </button>
+                            `).join('')}
+                        </div>
                     </div>
                     
-                    <button onclick="nextStep()" ${!orderData.sede ? 'disabled' : ''} class="w-full mt-6 bg-orange-600 text-white py-3 rounded-full font-bold hover:bg-orange-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition">
+                    <button onclick="nextStep()" ${!orderData.sede ? 'disabled' : ''} class="w-full mt-6 bg-orange-600 text-white py-3 rounded-full font-bold hover:bg-orange-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition flex-shrink-0">
                         Continuar →
                     </button>
                 </div>
@@ -457,42 +459,44 @@
 
         function renderStep2() {
             return `
-                <div>
-                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Tipo de Pedido</h3>
-                    <p class="text-gray-600 mb-6">¿Retiras en local o prefieres delivery?</p>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                        <button onclick="selectTipoEntrega('Retiro')" class="p-6 rounded-xl border-2 transition-all ${orderData.tipoEntrega === 'Retiro' ? 'border-orange-600 bg-orange-50 shadow-lg' : 'border-gray-200 hover:border-orange-300 hover:shadow'}">
-                            <svg class="mb-2 ${orderData.tipoEntrega === 'Retiro' ? 'text-orange-600' : 'text-gray-400'} w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
-                            </svg>
-                            <h4 class="font-bold text-lg mb-1">Retiro en Local</h4>
-                            <p class="text-sm text-gray-600">15-20 minutos</p>
-                        </button>
+                <div class="flex flex-col h-full">
+                    <div class="flex-1 overflow-y-auto pr-4">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Tipo de Pedido</h3>
+                        <p class="text-gray-600 mb-6">¿Retiras en local o prefieres delivery?</p>
                         
-                        <button onclick="selectTipoEntrega('Delivery')" class="p-6 rounded-xl border-2 transition-all ${orderData.tipoEntrega === 'Delivery' ? 'border-orange-600 bg-orange-50 shadow-lg' : 'border-gray-200 hover:border-orange-300 hover:shadow'}">
-                            <svg class="mb-2 ${orderData.tipoEntrega === 'Delivery' ? 'text-orange-600' : 'text-gray-400'} w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                            <h4 class="font-bold text-lg mb-1">Delivery</h4>
-                            <p class="text-sm text-gray-600">30-60 minutos</p>
-                        </button>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                            <button onclick="selectTipoEntrega('Retiro')" class="p-6 rounded-xl border-2 transition-all ${orderData.tipoEntrega === 'Retiro' ? 'border-orange-600 bg-orange-50 shadow-lg' : 'border-gray-200 hover:border-orange-300 hover:shadow'}">
+                                <svg class="mb-2 ${orderData.tipoEntrega === 'Retiro' ? 'text-orange-600' : 'text-gray-400'} w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                                </svg>
+                                <h4 class="font-bold text-lg mb-1">Retiro en Local</h4>
+                                <p class="text-sm text-gray-600">15-20 minutos</p>
+                            </button>
+                            
+                            <button onclick="selectTipoEntrega('Delivery')" class="p-6 rounded-xl border-2 transition-all ${orderData.tipoEntrega === 'Delivery' ? 'border-orange-600 bg-orange-50 shadow-lg' : 'border-gray-200 hover:border-orange-300 hover:shadow'}">
+                                <svg class="mb-2 ${orderData.tipoEntrega === 'Delivery' ? 'text-orange-600' : 'text-gray-400'} w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <h4 class="font-bold text-lg mb-1">Delivery</h4>
+                                <p class="text-sm text-gray-600">30-60 minutos</p>
+                            </button>
+                        </div>
+                        
+                        ${orderData.tipoEntrega === 'Delivery' ? `
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Dirección</label>
+                                    <input type="text" id="direccion" value="${orderData.direccion}" oninput="updateDireccionReal(this.value)" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-600 focus:border-transparent" placeholder="Calle 123, Depto 45">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Comuna</label>
+                                    <input type="text" id="comuna" value="${orderData.comuna}" oninput="updateComunaReal(this.value)" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-600 focus:border-transparent" placeholder="Comuna">
+                                </div>
+                            </div>
+                        ` : ''}
                     </div>
                     
-                    ${orderData.tipoEntrega === 'Delivery' ? `
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Dirección</label>
-                                <input type="text" id="direccion" value="${orderData.direccion}" oninput="updateDireccionReal(this.value)" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-600 focus:border-transparent" placeholder="Calle 123, Depto 45">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Comuna</label>
-                                <input type="text" id="comuna" value="${orderData.comuna}" oninput="updateComunaReal(this.value)" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-600 focus:border-transparent" placeholder="Comuna">
-                            </div>
-                        </div>
-                    ` : ''}
-                    
-                    <div class="flex gap-4 mt-6">
+                    <div class="flex gap-4 mt-6 flex-shrink-0">
                         <button onclick="prevStep()" class="flex-1 bg-gray-200 text-gray-700 py-3 rounded-full font-bold hover:bg-gray-300 transition">
                             ← Atrás
                         </button>
@@ -506,16 +510,18 @@
 
         function renderStep3() {
             return `
-                <div>
-                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Tus Datos</h3>
-                    <p class="text-gray-600 mb-6">¿A nombre de quién va el pedido?</p>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Nombre y Apellido</label>
-                        <input type="text" id="nombre" value="${orderData.nombre}" oninput="updateNombreReal(this.value)" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-600 focus:border-transparent" placeholder="Juan Pérez">
+                <div class="flex flex-col h-full">
+                    <div class="flex-1 overflow-y-auto pr-4">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Tus Datos</h3>
+                        <p class="text-gray-600 mb-6">¿A nombre de quién va el pedido?</p>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nombre y Apellido</label>
+                            <input type="text" id="nombre" value="${orderData.nombre}" oninput="updateNombreReal(this.value)" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-600 focus:border-transparent" placeholder="Juan Pérez">
+                        </div>
                     </div>
                     
-                    <div class="flex gap-4 mt-6">
+                    <div class="flex gap-4 mt-6 flex-shrink-0">
                         <button onclick="prevStep()" class="flex-1 bg-gray-200 text-gray-700 py-3 rounded-full font-bold hover:bg-gray-300 transition">
                             ← Atrás
                         </button>
@@ -577,65 +583,69 @@
             const total = calculateTotal();
             return `
                 <div class="flex flex-col h-full">
-                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Arma tu Pedido</h3>
-                    <p class="text-gray-600 mb-4">Selecciona los productos que deseas</p>
-                    
-                    <!-- Menu de productos (con scroll) -->
-                    <div class="space-y-4 mb-4">
-                        ${renderMenuCategories()}
+                    <div class="flex-1 overflow-y-auto pr-4">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Arma tu Pedido</h3>
+                        <p class="text-gray-600 mb-4">Selecciona los productos que deseas</p>
+                        
+                        <!-- Menu de productos (con scroll) -->
+                        <div class="space-y-4 mb-4">
+                            ${renderMenuCategories()}
+                        </div>
                     </div>
                     
-                    <!-- Carrito en la parte INFERIOR -->
-                    ${orderData.items.length > 0 ? `
-                        <div class="bg-orange-50 rounded-xl p-4 mb-4 border-2 border-orange-200">
-                            <h4 class="font-bold text-lg mb-3 flex items-center gap-2">
-                                <svg class="w-5 h-5 text-orange-600" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M5 4h1.5L9 16h10l4-14H7.12M9 13h10M16 19.5h2m-8 0h2"></path>
-                                </svg>
-                                Tu Carrito (${orderData.items.length} item${orderData.items.length > 1 ? 's' : ''})
-                            </h4>
-                            <div class="space-y-2 max-h-48 overflow-y-auto pr-2">
-                                ${orderData.items.map((item, index) => `
-                                    <div class="bg-white rounded-lg p-3 flex items-center justify-between gap-2">
-                                        <div class="flex-1 min-w-0">
-                                            <p class="font-bold text-sm truncate">${item.name}</p>
-                                            ${item.protein ? `<p class="text-xs text-gray-600">${item.protein}</p>` : ''}
-                                            ${item.notes ? `<p class="text-xs text-gray-500 italic">Obs: ${item.notes}</p>` : ''}
+                    <!-- Carrito y botones en la parte INFERIOR -->
+                    <div class="flex-shrink-0 mt-4 pt-4 border-t border-gray-200">
+                        ${orderData.items.length > 0 ? `
+                            <div class="bg-orange-50 rounded-xl p-4 mb-4 border-2 border-orange-200">
+                                <h4 class="font-bold text-lg mb-3 flex items-center gap-2">
+                                    <svg class="w-5 h-5 text-orange-600" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M5 4h1.5L9 16h10l4-14H7.12M9 13h10M16 19.5h2m-8 0h2"></path>
+                                    </svg>
+                                    Tu Carrito (${orderData.items.length} item${orderData.items.length > 1 ? 's' : ''})
+                                </h4>
+                                <div class="space-y-2 max-h-32 overflow-y-auto pr-2 mb-3">
+                                    ${orderData.items.map((item, index) => `
+                                        <div class="bg-white rounded-lg p-3 flex items-center justify-between gap-2">
+                                            <div class="flex-1 min-w-0">
+                                                <p class="font-bold text-sm truncate">${item.name}</p>
+                                                ${item.protein ? `<p class="text-xs text-gray-600">${item.protein}</p>` : ''}
+                                                ${item.notes ? `<p class="text-xs text-gray-500 italic">Obs: ${item.notes}</p>` : ''}
+                                            </div>
+                                            <div class="flex items-center gap-2 flex-shrink-0">
+                                                <button onclick="removeItem(${index})" class="w-6 h-6 bg-red-100 text-red-600 rounded hover:bg-red-200 font-bold flex items-center justify-center text-sm">-</button>
+                                                <button onclick="duplicateItem(${index})" class="w-6 h-6 bg-orange-100 text-orange-600 rounded hover:bg-orange-200 font-bold flex items-center justify-center text-sm">+</button>
+                                                <span class="font-bold text-sm ml-2 w-12 text-right">$${item.price.toLocaleString('es-CL')}</span>
+                                                <button onclick="removeItem(${index})" class="text-red-600 hover:text-red-700">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                    </svg>
+                                                </button>
+                                            </div>
                                         </div>
-                                        <div class="flex items-center gap-2 flex-shrink-0">
-                                            <button onclick="removeItem(${index})" class="w-6 h-6 bg-red-100 text-red-600 rounded hover:bg-red-200 font-bold flex items-center justify-center text-sm">-</button>
-                                            <button onclick="duplicateItem(${index})" class="w-6 h-6 bg-orange-100 text-orange-600 rounded hover:bg-orange-200 font-bold flex items-center justify-center text-sm">+</button>
-                                            <span class="font-bold text-sm ml-2 w-12 text-right">$${item.price.toLocaleString('es-CL')}</span>
-                                            <button onclick="removeItem(${index})" class="text-red-600 hover:text-red-700">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                                </svg>
-                                            </button>
-                                        </div>
+                                    `).join('')}
+                                </div>
+                                
+                                <div class="pt-3 border-t border-orange-300">
+                                    <div class="flex justify-between items-center font-bold text-lg">
+                                        <span>Total:</span>
+                                        <span class="text-orange-600">$${total.toLocaleString('es-CL')}</span>
                                     </div>
-                                `).join('')}
-                            </div>
-                            
-                            <div class="mt-3 pt-3 border-t border-orange-300">
-                                <div class="flex justify-between items-center font-bold text-lg">
-                                    <span>Total:</span>
-                                    <span class="text-orange-600">$${total.toLocaleString('es-CL')}</span>
                                 </div>
                             </div>
+                        ` : `
+                            <div class="bg-blue-50 rounded-xl p-4 mb-4 border-2 border-blue-200">
+                                <p class="text-blue-700 text-sm">ℹ️ Tu carrito está vacío. Selecciona productos para comenzar.</p>
+                            </div>
+                        `}
+                        
+                        <div class="flex gap-4">
+                            <button onclick="prevStep()" class="flex-1 bg-gray-200 text-gray-700 py-3 rounded-full font-bold hover:bg-gray-300 transition">
+                                ← Atrás
+                            </button>
+                            <button onclick="nextStep()" ${orderData.items.length === 0 ? 'disabled' : ''} class="flex-1 bg-orange-600 text-white py-3 rounded-full font-bold hover:bg-orange-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition">
+                                Confirmar y Continuar →
+                            </button>
                         </div>
-                    ` : `
-                        <div class="bg-blue-50 rounded-xl p-4 mb-4 border-2 border-blue-200">
-                            <p class="text-blue-700 text-sm">ℹ️ Tu carrito está vacío. Selecciona productos para comenzar.</p>
-                        </div>
-                    `}
-                    
-                    <div class="flex gap-4">
-                        <button onclick="prevStep()" class="flex-1 bg-gray-200 text-gray-700 py-3 rounded-full font-bold hover:bg-gray-300 transition">
-                            ← Atrás
-                        </button>
-                        <button onclick="nextStep()" ${orderData.items.length === 0 ? 'disabled' : ''} class="flex-1 bg-orange-600 text-white py-3 rounded-full font-bold hover:bg-orange-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition">
-                            Confirmar y Continuar →
-                        </button>
                     </div>
                 </div>
             `;
@@ -1096,19 +1106,21 @@
 
         function renderStep5() {
             return `
-                <div>
-                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Método de Pago</h3>
-                    <p class="text-gray-600 mb-6">¿Cómo vas a pagar?</p>
-                    
-                    <div class="grid grid-cols-1 gap-4">
-                        ${['Efectivo', 'Débito', 'Crédito', 'Transferencia'].map(metodo => `
-                            <button onclick="selectMetodoPago('${metodo}')" class="p-4 rounded-xl border-2 transition-all text-left ${orderData.metodoPago === metodo ? 'border-orange-600 bg-orange-50 shadow-lg' : 'border-gray-200 hover:border-orange-300 hover:shadow'}">
-                                <h4 class="font-bold text-lg">${metodo}</h4>
-                            </button>
-                        `).join('')}
+                <div class="flex flex-col h-full">
+                    <div class="flex-1 overflow-y-auto pr-4">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Método de Pago</h3>
+                        <p class="text-gray-600 mb-6">¿Cómo vas a pagar?</p>
+                        
+                        <div class="grid grid-cols-1 gap-4">
+                            ${['Efectivo', 'Débito', 'Crédito', 'Transferencia'].map(metodo => `
+                                <button onclick="selectMetodoPago('${metodo}')" class="p-4 rounded-xl border-2 transition-all text-left ${orderData.metodoPago === metodo ? 'border-orange-600 bg-orange-50 shadow-lg' : 'border-gray-200 hover:border-orange-300 hover:shadow'}">
+                                    <h4 class="font-bold text-lg">${metodo}</h4>
+                                </button>
+                            `).join('')}
+                        </div>
                     </div>
                     
-                    <div class="flex gap-4 mt-6">
+                    <div class="flex gap-4 mt-6 flex-shrink-0">
                         <button onclick="prevStep()" class="flex-1 bg-gray-200 text-gray-700 py-3 rounded-full font-bold hover:bg-gray-300 transition">
                             ← Atrás
                         </button>
@@ -1125,78 +1137,80 @@
             const delivery = orderData.tipoEntrega === 'Delivery' ? 2000 : 0;
             const total = calculateTotal();
             return `
-                <div>
-                    <div class="text-center mb-6">
-                        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                <div class="flex flex-col h-full">
+                    <div class="flex-1 overflow-y-auto pr-4">
+                        <div class="text-center mb-6">
+                            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-800 mb-2">¡Pedido Listo!</h3>
+                            <p class="text-gray-600">Revisa tu pedido antes de enviarlo</p>
+                        </div>
+                        
+                        <div class="bg-gray-50 rounded-xl p-6 mb-6 space-y-4">
+                            <div>
+                                <p class="text-sm text-gray-600">Sede</p>
+                                <p class="font-bold">${orderData.sede}</p>
+                            </div>
+                            
+                            <div>
+                                <p class="text-sm text-gray-600">Tipo de entrega</p>
+                                <p class="font-bold">${orderData.tipoEntrega}</p>
+                                ${orderData.tipoEntrega === 'Delivery' ? `<p class="text-sm">${orderData.direccion}, ${orderData.comuna}</p>` : ''}
+                            </div>
+                            
+                            <div>
+                                <p class="text-sm text-gray-600">Cliente</p>
+                                <p class="font-bold">${orderData.nombre}</p>
+                            </div>
+                            
+                            <div>
+                                <p class="text-sm text-gray-600">Método de pago</p>
+                                <p class="font-bold">${orderData.metodoPago}</p>
+                            </div>
+                            
+                            <div>
+                                <p class="text-sm text-gray-600 mb-2">Productos</p>
+                                ${orderData.items.map(item => `
+                                    <div class="flex justify-between text-sm mb-1">
+                                        <span>1x ${item.name} ${item.protein ? `(${item.protein})` : ''}</span>
+                                        <span class="font-bold">$${item.price.toLocaleString('es-CL')}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            
+                            <div class="pt-4 border-t border-gray-300">
+                                ${delivery > 0 ? `
+                                    <div class="flex justify-between text-sm mb-2">
+                                        <span>Subtotal:</span>
+                                        <span class="font-bold">$${subtotal.toLocaleString('es-CL')}</span>
+                                    </div>
+                                    <div class="flex justify-between text-sm mb-2 text-red-600">
+                                        <span>Costo Delivery:</span>
+                                        <span class="font-bold">$${delivery.toLocaleString('es-CL')}</span>
+                                    </div>
+                                ` : ''}
+                                <div class="flex justify-between items-center text-xl font-bold">
+                                    <span>Total:</span>
+                                    <span class="text-orange-600">$${total.toLocaleString('es-CL')}</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-blue-50 rounded-xl p-4 mb-6 flex items-center gap-3">
+                            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
-                        </div>
-                        <h3 class="text-2xl font-bold text-gray-800 mb-2">¡Pedido Listo!</h3>
-                        <p class="text-gray-600">Revisa tu pedido antes de enviarlo</p>
-                    </div>
-                    
-                    <div class="bg-gray-50 rounded-xl p-6 mb-6 space-y-4">
-                        <div>
-                            <p class="text-sm text-gray-600">Sede</p>
-                            <p class="font-bold">${orderData.sede}</p>
-                        </div>
-                        
-                        <div>
-                            <p class="text-sm text-gray-600">Tipo de entrega</p>
-                            <p class="font-bold">${orderData.tipoEntrega}</p>
-                            ${orderData.tipoEntrega === 'Delivery' ? `<p class="text-sm">${orderData.direccion}, ${orderData.comuna}</p>` : ''}
-                        </div>
-                        
-                        <div>
-                            <p class="text-sm text-gray-600">Cliente</p>
-                            <p class="font-bold">${orderData.nombre}</p>
-                        </div>
-                        
-                        <div>
-                            <p class="text-sm text-gray-600">Método de pago</p>
-                            <p class="font-bold">${orderData.metodoPago}</p>
-                        </div>
-                        
-                        <div>
-                            <p class="text-sm text-gray-600 mb-2">Productos</p>
-                            ${orderData.items.map(item => `
-                                <div class="flex justify-between text-sm mb-1">
-                                    <span>1x ${item.name} ${item.protein ? `(${item.protein})` : ''}</span>
-                                    <span class="font-bold">$${item.price.toLocaleString('es-CL')}</span>
-                                </div>
-                            `).join('')}
-                        </div>
-                        
-                        <div class="pt-4 border-t border-gray-300">
-                            ${delivery > 0 ? `
-                                <div class="flex justify-between text-sm mb-2">
-                                    <span>Subtotal:</span>
-                                    <span class="font-bold">$${subtotal.toLocaleString('es-CL')}</span>
-                                </div>
-                                <div class="flex justify-between text-sm mb-2 text-red-600">
-                                    <span>Costo Delivery:</span>
-                                    <span class="font-bold">$${delivery.toLocaleString('es-CL')}</span>
-                                </div>
-                            ` : ''}
-                            <div class="flex justify-between items-center text-xl font-bold">
-                                <span>Total:</span>
-                                <span class="text-orange-600">$${total.toLocaleString('es-CL')}</span>
+                            <div>
+                                <p class="font-bold text-blue-900">Tiempo estimado</p>
+                                <p class="text-sm text-blue-700">${orderData.tipoEntrega === 'Delivery' ? '30-60 minutos' : '15-20 minutos'}</p>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="bg-blue-50 rounded-xl p-4 mb-6 flex items-center gap-3">
-                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        <div>
-                            <p class="font-bold text-blue-900">Tiempo estimado</p>
-                            <p class="text-sm text-blue-700">${orderData.tipoEntrega === 'Delivery' ? '30-60 minutos' : '15-20 minutos'}</p>
-                        </div>
-                    </div>
-                    
-                    <div class="flex gap-4">
+                    <div class="flex gap-4 flex-shrink-0">
                         <button onclick="prevStep()" class="flex-1 bg-gray-200 text-gray-700 py-3 rounded-full font-bold hover:bg-gray-300 transition">
                             ← Atrás
                         </button>
